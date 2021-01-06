@@ -1,6 +1,7 @@
 use clap::{App, Arg};
 use git2::Repository;
 use std::fs;
+use std::process::{Command, Stdio};
 
 struct Cli {
     title: String,
@@ -28,9 +29,13 @@ fn main() {
 }
 
 fn create_post(title: &str) -> std::io::Result<()> {
-    fs::create_dir(title).unwrap_or_else(|e| panic!("Error: creating dir: {}", e));
-    let path_to = format!("{}/index.md", title);
-    fs::File::create(path_to).unwrap_or_else(|e| panic!("Error: creating file: {}", e));
+    let cmdargs = format!("posts/{}/index.md", title);
+    Command::new("hugo")
+        .arg("new")
+        .arg(cmdargs)
+        .stdout(Stdio::null())
+        .spawn()
+        .expect("Can't run command `hugo new`");
     Ok(())
 }
 
