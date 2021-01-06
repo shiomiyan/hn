@@ -1,6 +1,5 @@
 use clap::{App, Arg};
 use git2::Repository;
-use std::fs;
 use std::process::{Command, Stdio};
 
 struct Cli {
@@ -23,7 +22,7 @@ fn main() {
         .get_matches();
 
     if let Some(title) = matches.value_of("new") {
-        // git_checkout(title).unwrap_or_else(|e| panic!("Error: failed to checkout branch {}.", e));
+        git_checkout(title).unwrap_or_else(|e| panic!("Error: failed to checkout branch {}.", e));
         create_post(title).unwrap_or_else(|e| panic!("Error: failed to create new post {}.", e));
     }
 }
