@@ -12,4 +12,4 @@ It performs the following operations,
 - [x] Checkout the article title branch.
 - [ ] Open with Vim.
 - [ ] Start a local server in the background while editing.
-
+- [ ] Env values support for create new post everywhere
