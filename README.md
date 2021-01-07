@@ -7,13 +7,21 @@ It performs the following operations,
 - checkout the article title name branch
 - create `index.md` in `contents/posts/<article-name>/`
 
+## require
+
+`hugo` and `git`.
+
 ### usage
 
-to create new post, run
+To create new post, run
 
 ```
 hn <article-name>
 ```
+
+### support
+
+Only Linux/macOS, doesn't support Windows.
 
 **TODO**
 
