@@ -1,10 +1,7 @@
 use clap::{App, Arg};
 use git2::Repository;
-use std::process::{Command, Stdio};
-
-struct Cli {
-    title: String,
-}
+use std::io::Result;
+use std::process::{Command, ExitStatus, Stdio};
 
 fn main() {
     let matches = App::new("hugo-new")
@@ -12,22 +9,32 @@ fn main() {
         .about("Make faster your blogging.")
         .author("Created by shiomiya.")
         .arg(
-            Arg::new("new")
+            Arg::new("INPUT")
                 .about("input post title")
-                .short('n')
-                .long("new")
                 .takes_value(true)
                 .required(true),
         )
+        .arg(
+            Arg::new("edit")
+                .about("open with Vim")
+                .long("edit")
+                .short('e'),
+        )
         .get_matches();
 
-    if let Some(title) = matches.value_of("new") {
+    if let Some(title) = matches.value_of("INPUT") {
         git_checkout(title).unwrap_or_else(|e| panic!("Error: failed to checkout branch {}.", e));
         create_post(title).unwrap_or_else(|e| panic!("Error: failed to create new post {}.", e));
+        // NOTE: code for not being able to open Vim
+        println!("created on `content/posts/{}/index.md`", title);
+    }
+
+    if let Some(title) = matches.value_of("edit") {
+        edit(title).unwrap_or_else(|e| panic!("Error: failed to open with Vim {}", e));
     }
 }
 
-fn create_post(title: &str) -> std::io::Result<()> {
+fn create_post(title: &str) -> Result<()> {
     let cmdargs = format!("posts/{}/index.md", title);
     Command::new("hugo")
         .arg("new")
@@ -38,7 +45,7 @@ fn create_post(title: &str) -> std::io::Result<()> {
     Ok(())
 }
 
-fn git_checkout(title: &str) -> std::io::Result<()> {
+fn git_checkout(title: &str) -> Result<()> {
     let repo = match Repository::open(".") {
         Ok(repo) => repo,
         Err(e) => panic!("Error: failed to open site repository: {}", e),
@@ -61,5 +68,16 @@ fn git_checkout(title: &str) -> std::io::Result<()> {
     repo.set_head(&("refs/heads/".to_owned() + title))
         .unwrap_or_else(|e| panic!("Error: failed to set head to {}. \n {}", title, e));
 
+    Ok(())
+}
+
+fn edit(title: &str) -> Result<()> {
+    let path = format!("content/posts/{}/index.md", title);
+    Command::new("vi")
+        .arg(path)
+        .stdout(Stdio::piped())
+        .spawn()?
+        .wait()
+        .expect("Error: failed to start command Vim");
     Ok(())
 }
