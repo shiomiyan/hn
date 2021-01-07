@@ -7,6 +7,14 @@ It performs the following operations,
 - checkout the article title name branch
 - create `index.md` in `contents/posts/<article-name>/`
 
+### usage
+
+to create new post, run
+
+```
+hn <article-name>
+```
+
 **TODO**
 
 - [x] Checkout the article title branch.
