@@ -31,14 +31,14 @@ fn main() {
 }
 
 fn create_post(title: &str) -> Result<()> {
-    let path = std::env::current_dir()
-        .unwrap()
-        .join(title)
-        .join("index.md");
+    let path = {
+        let path = std::env::current_dir().unwrap();
+        format!("{}/{}/index.md", path.to_str().unwrap(), title)
+    };
 
     Command::new("hugo")
         .arg("new")
-        .arg(path.to_str().unwrap())
+        .arg(path)
         .stdout(Stdio::null())
         .spawn()
         .expect("Can't run command `hugo new`");
