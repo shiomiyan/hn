@@ -4,8 +4,8 @@ use std::io::Result;
 use std::process::{Command, Stdio};
 
 fn main() {
-    let matches = App::new("hugo-new")
-        .version("1.0")
+    let matches = App::new("rugo")
+        .version("0.1")
         .about("Make faster your blogging.")
         .author("Created by shiomiya.")
         .arg(
