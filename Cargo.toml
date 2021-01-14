@@ -1,5 +1,5 @@
 [package]
-name = "hn"
+name = "rugo"
 description = "A command line tool that wraps the hugo command."
 version = "0.1.0"
 authors = ["shiomiyan <dev.umisk@gmail.com>"]

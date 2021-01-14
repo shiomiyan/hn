@@ -1,7 +1,7 @@
 use clap::{App, Arg};
 use git2::Repository;
 use std::io::Result;
-use std::process::{Command, ExitStatus, Stdio};
+use std::process::{Command, Stdio};
 
 fn main() {
     let matches = App::new("hugo-new")

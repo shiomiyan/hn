@@ -120,14 +120,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "hn"
-version = "0.1.0"
-dependencies = [
- "clap",
- "git2",
-]
-
-[[package]]
 name = "idna"
 version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -301,6 +293,14 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "991431c3519a3f36861882da93630ce66b52918dcf1b8e2fd66b397fc96f28df"
 dependencies = [
  "proc-macro2",
+]
+
+[[package]]
+name = "rugo"
+version = "0.1.0"
+dependencies = [
+ "clap",
+ "git2",
 ]
 
 [[package]]

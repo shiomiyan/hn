@@ -1,11 +1,11 @@
 A CLI tool for make blogging faster.
 
-This is a command line tool that wraps the `Hugo new` command.
+This is a command line tool that wraps the `hugo new` command.
 
 It performs the following operations,
 
 - checkout the article title name branch
-- create `index.md` in `contents/posts/<article-name>/`
+- generate `index.md` in `contents/posts/<article-name>/`
 
 ## require
 
@@ -16,7 +16,7 @@ It performs the following operations,
 To create new post, run
 
 ```
-hn <article-name>
+rugo <article-name>
 ```
 
 ### support
