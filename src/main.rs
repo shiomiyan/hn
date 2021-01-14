@@ -31,10 +31,12 @@ fn main() {
 }
 
 fn create_post(title: &str) -> Result<()> {
-    let path = {
-        let path = std::env::current_dir().unwrap();
-        format!("{}/{}/index.md", path.to_str().unwrap(), title)
-    };
+    let path = std::env::current_dir()
+        .unwrap()
+        .join("content")
+        .join("posts")
+        .join(title)
+        .join("index.md");
 
     Command::new("hugo")
         .arg("new")
@@ -82,4 +84,19 @@ fn edit(title: &str) -> Result<()> {
         .wait()
         .expect("Error: failed to start command Vim");
     Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn get_path() {
+        let title = "hoge";
+        let path = std::env::current_dir()
+            .unwrap()
+            .join("content")
+            .join("posts")
+            .join(title)
+            .join("index.md");
+        dbg!(&path);
+    }
 }
