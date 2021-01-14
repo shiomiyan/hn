@@ -13,15 +13,18 @@ It performs the following operations,
 
 ### usage
 
-To create new post, run
-
 ```
-rugo <article-name>
+USAGE:
+    rugo [SUBCOMMAND]
+
+FLAGS:
+    -h, --help       Prints help information
+    -V, --version    Prints version information
+
+SUBCOMMANDS:
+    help    Prints this message or the help of the given subcommand(s)
+    new     create new post with git branching
 ```
-
-### support
-
-Only Linux/macOS, doesn't support Windows.
 
 **TODO**
 

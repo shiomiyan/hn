@@ -8,29 +8,32 @@ fn main() {
         .version("0.1")
         .about("Make faster your blogging.")
         .author("Created by shiomiya.")
-        .arg(
-            Arg::new("INPUT")
-                .about("input post title")
-                .takes_value(true)
-                .required(true),
-        )
-        .arg(
-            Arg::new("edit")
-                .about("open with Vim")
-                .long("edit")
-                .short('e'),
+        .subcommand(
+            App::new("new")
+                .about("create new post with git branching")
+                .args(vec![
+                    Arg::new("TITLE")
+                        .about("input post title")
+                        .takes_value(true)
+                        .required(true),
+                    Arg::new("edit")
+                        .about("edit with editor")
+                        .short('e')
+                        .long("edit"),
+                ]),
         )
         .get_matches();
 
-    if let Some(title) = matches.value_of("INPUT") {
+    if let Some(ref matches) = matches.subcommand_matches("new") {
+        let title = matches.value_of("TITLE").unwrap();
         git_checkout(title).unwrap_or_else(|e| panic!("Error: failed to checkout branch {}.", e));
         create_post(title).unwrap_or_else(|e| panic!("Error: failed to create new post {}.", e));
         // NOTE: code for not being able to open Vim
         println!("created on `content/posts/{}/index.md`", title);
-    }
 
-    if let Some(title) = matches.value_of("edit") {
-        edit(title).unwrap_or_else(|e| panic!("Error: failed to open with Vim {}", e));
+        if matches.is_present("edit") {
+            edit(title).unwrap_or_else(|e| panic!("Error: failed to open with Vim. {}", e))
+        }
     }
 }
 
@@ -73,7 +76,7 @@ fn git_checkout(title: &str) -> Result<()> {
 
 fn edit(title: &str) -> Result<()> {
     let path = format!("content/posts/{}/index.md", title);
-    Command::new("vi")
+    Command::new("vim")
         .arg(path)
         .stdout(Stdio::piped())
         .spawn()?
