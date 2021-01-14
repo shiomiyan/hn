@@ -1,6 +1,7 @@
 use clap::{App, Arg};
 use git2::Repository;
 use std::io::Result;
+use std::path::Path;
 use std::process::{Command, Stdio};
 
 fn main() {
@@ -11,16 +12,12 @@ fn main() {
         .subcommand(
             App::new("new")
                 .about("create new post with git branching")
-                .args(vec![
+                .arg(
                     Arg::new("TITLE")
                         .about("input post title")
                         .takes_value(true)
                         .required(true),
-                    Arg::new("edit")
-                        .about("edit with editor")
-                        .short('e')
-                        .long("edit"),
-                ]),
+                ),
         )
         .get_matches();
 
@@ -30,18 +27,15 @@ fn main() {
         create_post(title).unwrap_or_else(|e| panic!("Error: failed to create new post {}.", e));
         // NOTE: code for not being able to open Vim
         println!("created on `content/posts/{}/index.md`", title);
-
-        if matches.is_present("edit") {
-            edit(title).unwrap_or_else(|e| panic!("Error: failed to open with Vim. {}", e))
-        }
     }
 }
 
 fn create_post(title: &str) -> Result<()> {
-    let cmdargs = format!("posts/{}/index.md", title);
+    let current_dir = std::env::current_dir().unwrap();
+    let path = Path::new(&current_dir).join(title).join("index.md");
     Command::new("hugo")
         .arg("new")
-        .arg(cmdargs)
+        .arg(path.to_str().unwrap())
         .stdout(Stdio::null())
         .spawn()
         .expect("Can't run command `hugo new`");
@@ -74,6 +68,7 @@ fn git_checkout(title: &str) -> Result<()> {
     Ok(())
 }
 
+#[allow(dead_code)]
 fn edit(title: &str) -> Result<()> {
     let path = format!("content/posts/{}/index.md", title);
     Command::new("vim")
